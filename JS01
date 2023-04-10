@@ -1,0 +1,61 @@
+
+const end = document.querySelector('#endereco');
+const bairro = document.querySelector('#bairro');
+const cidade = document.querySelector('#cidade');
+const estado = document.querySelector('#estado');
+const cep = document.querySelector('#cep');
+
+async function buscarEndereco() {
+
+    const url = `https://viacep.com.br/ws/${cep.value}/json/`
+
+
+    if (validarCep(cep.value)) {
+        // Realizando a requisição na url gerada
+        const dados = await fetch(url);
+
+        // Convertendo os dados da resposta para json
+        // para obtermos os dados do endereço
+        const enredeco = await dados.json();
+
+        if (endereco.hasOwnProperty("erro")){
+            alert('Endereço não encontrado.')
+        }
+        else {
+        preencherFormulario(enredeco)
+        }
+
+        
+    }
+    else {
+
+        alert('Digite um CEP válido!')
+    }
+
+} 
+
+
+function preencherFormulario(endereco) {
+    end.value = endereco.logradouro;
+    bairro.value = endereco.bairro;
+    estado.value = endereco.uf;
+    cidade.value = endereco.localidade;
+    console.log(estado)
+    console.log(cidade)
+
+}
+// Definindo uma função para verificar se o CEP é válido
+function validarCep(cep) {
+    if (cep.length == 8 && /^[0-9]+$/.test(cep)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+// Adicionando o evento de saída do foco
+cep.addEventListener("blur", buscarEndereco)
+
+ // hasOwnProperty('key')
+
